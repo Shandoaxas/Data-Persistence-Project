@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,9 +14,29 @@ public class ActionPanelController : MonoBehaviour
         if(sessionData == null)
         {
             sessionData = new SessionManager.SessionData();
-            sessionData.currentPlayerName = "Player";
+            string playerName = nameInput.GetComponent<TMP_InputField>().text;
+            if (!string.IsNullOrWhiteSpace(playerName))
+            {
+                sessionData.currentPlayerName = playerName;
+            }
+            else
+            {
+                sessionData.currentPlayerName = "Player";
+            }
             sessionData.currentHighScore = 0;
             SessionManager.instance.gameSession = sessionData;
+        }
+        else
+        {
+            string playerName = nameInput.GetComponent<TMP_InputField>().text;
+            if(!string.IsNullOrWhiteSpace(playerName))
+            {
+                if(sessionData.currentPlayerName != playerName)
+                {
+                    sessionData.currentPlayerName = playerName;
+                    sessionData.currentHighScore = 0;
+                }
+            }
         }
 
         SceneManager.LoadScene(1);
