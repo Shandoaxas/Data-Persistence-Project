@@ -19,12 +19,14 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
     private SessionManager.SessionData sessionData;
+    private SessionManager.SessionData bestSessionData;
 
     
     // Start is called before the first frame update
     void Start()
     {
         sessionData = SessionManager.instance.gameSession;
+        bestSessionData = SessionManager.instance.bestGameSession;
         AddPoint(0);
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
@@ -81,10 +83,21 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
-        if(sessionData.currentHighScore < m_Points)
+        if(bestSessionData != null)
         {
-            sessionData.currentHighScore = m_Points;
+            if (bestSessionData.currentHighScore < m_Points)
+            {
+                bestSessionData.currentHighScore = m_Points;
+                bestSessionData.currentPlayerName = sessionData.currentPlayerName;
+            }
         }
+        else
+        {
+            bestSessionData = new SessionManager.SessionData();
+            bestSessionData.currentHighScore = m_Points;
+            bestSessionData.currentPlayerName = sessionData.currentPlayerName;
+        }
+        
         m_GameOver = true;
         GameOverText.SetActive(true);
     }

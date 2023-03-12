@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class SessionManager : MonoBehaviour
@@ -11,16 +12,14 @@ public class SessionManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        if(SessionManager.instance == null)
-        {
-            SessionManager.instance = this;
-            DontDestroyOnLoad(gameObject);
-            return;
-        }
-        else
+        if(SessionManager.instance != null)
         {
             Destroy(gameObject);
+            return;
         }
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+        LoadHighScore();
     }
 
     [Serializable]
@@ -32,12 +31,27 @@ public class SessionManager : MonoBehaviour
 
     public void SaveIfHighScore()
     {
-
+        string jsonData = JsonUtility.ToJson(bestGameSession);
+        File.WriteAllText(Application.persistentDataPath + "savefile.json", jsonData);
     }
 
     public void LoadHighScore()
     {
+        string path = Application.persistentDataPath + "savefile.json";
 
+        if (File.Exists(path))
+        {
+            string jsonData = File.ReadAllText(path);
+            SessionData data = JsonUtility.FromJson<SessionData>(jsonData);
+            bestGameSession = data;
+
+        }
+        else
+        {
+            bestGameSession = new SessionData();
+            bestGameSession.currentHighScore = 0;
+            bestGameSession.currentPlayerName = "";
+        }
     }
 
 

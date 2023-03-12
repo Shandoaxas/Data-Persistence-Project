@@ -44,6 +44,7 @@ public class ActionPanelController : MonoBehaviour
 
     public void ExitGame()
     {
+        SessionManager.instance.SaveIfHighScore();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.ExitPlaymode();
 #else
