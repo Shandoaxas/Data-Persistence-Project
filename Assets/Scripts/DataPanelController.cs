@@ -1,18 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class DataPanelController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameObject bestScore;
+    public GameObject nameInput;
+    private void Start()
     {
+        SessionManager.SessionData data = SessionManager.instance.gameSession;
+        if(data != null)
+        {
+            UpdateWithSessionData(data);
+        }
         
+        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    void UpdateWithSessionData(SessionManager.SessionData data)
     {
-        
+        bestScore.GetComponent<TextMeshProUGUI>().text = $"Best Score : {data.currentPlayerName} {data.currentHighScore}";
+        nameInput.GetComponent<TMP_InputField>().text = data.currentPlayerName;
     }
 }

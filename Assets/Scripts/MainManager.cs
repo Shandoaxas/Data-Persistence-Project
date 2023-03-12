@@ -77,6 +77,11 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
+        SessionManager.SessionData data = SessionManager.instance.gameSession;
+        if(data.currentHighScore < m_Points)
+        {
+            data.currentHighScore = m_Points;
+        }
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
